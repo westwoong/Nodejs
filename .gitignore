@@ -1,3 +1,5 @@
 .env
 Dockfile
+node_modules/
 Docker-compose.yml
+package-lock.json
