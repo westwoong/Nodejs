@@ -1,9 +1,16 @@
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 const { Sequelize, DataTypes, json } = require('sequelize');
 const crypto = require('crypto');
 app.use(express.json());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+}));
 require('dotenv').config();
 
 const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
