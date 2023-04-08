@@ -75,6 +75,10 @@ app.listen(process.env.PORT, async () => {
     console.log(`서버가 실행됩니다. http://localhost:${process.env.PORT}`);
 });
 
+app.get('/', async (req, res) => {
+    res.status(200).send('안녕하세요 Elastic Beanstalk 테스트 접속 페이지입니다');
+})
+
 // 회원가입
 app.post('/users/sign-up', async (req, res) => {
     const { email, password, name } = req.body;
