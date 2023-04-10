@@ -13,8 +13,8 @@ app.use(cors({
 }));
 require('dotenv').config();
 
-const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
-    host: process.env.DB_URL,
+const sequelize = new Sequelize('ebdb', process.env.RDS_USERNAME, process.env.RDS_PASSWORD, {
+    host: process.env.RDS_HOSTNAME,
     dialect: 'mysql',
     timezone: "+09:00",
 })
