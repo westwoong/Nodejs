@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
+const port = process.env.PORT || 3000;
 const cors = require('cors');
 const { Sequelize, DataTypes, json } = require('sequelize');
 const crypto = require('crypto');
@@ -63,16 +64,16 @@ const Post = sequelize.define('posts', {
 User.hasMany(Post);
 Post.belongsTo(User);
 
-app.listen(process.env.PORT, async () => {
+app.listen(port, async () => {
     try {
         await sequelize.authenticate();
         console.log('connection success');
-        await sequelize.sync({ force: true });
+        // await sequelize.sync({ force: true });
     }
     catch (error) {
         console.error(`connection failes :${error}`);
     }
-    console.log(`서버가 실행됩니다. http://localhost:${process.env.PORT}`);
+    console.log(`서버가 실행됩니다. http://localhost:${port}`);
 });
 
 app.get('/', async (req, res) => {
