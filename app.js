@@ -3,9 +3,9 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 3000;
 const cors = require('cors');
-const { DataTypes, json } = require('sequelize');
-const sequelize = require('./conf/database');
 const crypto = require('crypto');
+require('./models/index');
+require('dotenv').config();
 app.use(express.json());
 app.use(cors({
     origin: '*',
@@ -13,53 +13,6 @@ app.use(cors({
     preflightContinue: false,
     optionsSuccessStatus: 204
 }));
-require('dotenv').config();
-
-
-
-const User = sequelize.define('users', {
-    id: {
-        type: DataTypes.INTEGER(),
-        primaryKey: true,
-        autoIncrement: true,
-    },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        comment: "사용자 이메일"
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        comment: "사용자 비밀번호"
-    },
-    salt: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    }
-})
-
-const Post = sequelize.define('posts', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-    },
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    content: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    }
-})
-User.hasMany(Post);
-Post.belongsTo(User);
 
 app.listen(port, async () => {
     console.log(`서버가 실행됩니다. http://localhost:${port}`);
