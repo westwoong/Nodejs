@@ -3,7 +3,8 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 3000;
 const cors = require('cors');
-const { Sequelize, DataTypes, json } = require('sequelize');
+const { DataTypes, json } = require('sequelize');
+const sequelize = require('./conf/database');
 const crypto = require('crypto');
 app.use(express.json());
 app.use(cors({
@@ -14,11 +15,7 @@ app.use(cors({
 }));
 require('dotenv').config();
 
-const sequelize = new Sequelize('ebdb', process.env.RDS_USERNAME, process.env.RDS_PASSWORD, {
-    host: process.env.RDS_HOSTNAME,
-    dialect: 'mysql',
-    timezone: "+09:00",
-})
+
 
 const User = sequelize.define('users', {
     id: {
@@ -65,20 +62,8 @@ User.hasMany(Post);
 Post.belongsTo(User);
 
 app.listen(port, async () => {
-    try {
-        await sequelize.authenticate();
-        console.log('connection success');
-        // await sequelize.sync({ force: true });
-    }
-    catch (error) {
-        console.error(`connection failes :${error}`);
-    }
     console.log(`서버가 실행됩니다. http://localhost:${port}`);
 });
-
-app.get('/', async (req, res) => {
-    res.status(200).send('안녕하세요 Elastic Beanstalk 테스트 접속 페이지입니다');
-})
 
 // 회원가입
 app.post('/users/sign-up', async (req, res) => {
