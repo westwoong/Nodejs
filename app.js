@@ -1,21 +1,14 @@
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
-const port = process.env.PORT || 3000;
-const cors = require('cors');
 const crypto = require('crypto');
 require('./models/index');
+require('./conf/cors');
 require('dotenv').config();
 app.use(express.json());
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],
-    preflightContinue: false,
-    optionsSuccessStatus: 204
-}));
 
-app.listen(port, async () => {
-    console.log(`서버가 실행됩니다. http://localhost:${port}`);
+app.listen(process.env.PORT, async () => {
+    console.log(`서버가 실행됩니다. http://localhost:${process.env.PORT}`);
 });
 
 // 회원가입
