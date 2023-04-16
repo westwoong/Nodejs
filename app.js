@@ -1,14 +1,13 @@
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
 require('./models/index');
 require('./conf/cors');
 require('dotenv').config();
-const usersRoute = require('./routes/sign');
-app.use(express.json());
+const signRoute = require('./routes/sign');
+gitapp.use(express.json());
 
-app.use('/', usersRoute);
+app.use('/', signRoute);
 
 app.listen(process.env.PORT, async () => {
     console.log(`서버가 실행됩니다. http://localhost:${process.env.PORT}`);
