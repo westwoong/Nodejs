@@ -1,26 +1,18 @@
 const express = require('express');
-const app = express();
+const postRouter = express.Router();
 const jwt = require('jsonwebtoken');
-require('./models/index');
-require('./conf/cors');
-require('dotenv').config();
-const signRoute = require('./routes/sign');
-const postRoute = require('./routes/posts');
-app.use(express.json());
+const { Post } = require('../models/index');
+require('dotenv').config('../.env');
 
-app.use('/', signRoute);
-app.use('/posts', postRoute);
+postRouter.post('/', async (req, res) => {
+    const { title, content } = req.body;
 
-app.listen(process.env.PORT, async () => {
-    console.log(`서버가 실행됩니다. http://localhost:${process.env.PORT}`);
-});
-
-app.get('/myinfo', async (req, res) => {
     const authHeader = req.headers.authorization;
 
     let token = authHeader.substring(7, authHeader.length); // Bearer 뒤에 process.env.JSON_SECRETKEY 값 가져오는 substring메소드
 
     let payload;
+
     try {
         payload = jwt.verify(token, process.env.JSON_SECRETKEY);
     } catch (err) {
@@ -35,9 +27,11 @@ app.get('/myinfo', async (req, res) => {
         // }
         // return;
     }
-
+    // payload안에 들어있는 id는 userId이다.
+    // userId, title, content를 활용해서 게시글에 대한 정보를 DB에 저장.
     const payloadArray = payload.id[0]; // payload.id 객체에 있는 id값만 받아오는 변수
-    // column에서 이름과 이메일만 보여주게 한 후 PK값에는 payload.id를 받아와 검색
-    const userInfo = await User.findAll({ attributes: ['name', 'email'], where: { id: payloadArray.id } });
-    res.status(200).send(userInfo);
+    await Post.create({ userId: payloadArray.id, title, content });
+    res.status(204).send();
 })
+
+module.exports = postRouter;
